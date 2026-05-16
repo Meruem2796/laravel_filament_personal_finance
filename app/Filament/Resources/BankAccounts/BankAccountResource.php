@@ -1,8 +1,8 @@
 <?php
-namespace App\Filament\Resources\Categories;
+namespace App\Filament\Resources\BankAccounts;
 
-use App\Filament\Resources\Categories\Pages\ManageCategories;
-use App\Models\Category;
+use App\Filament\Resources\BankAccounts\Pages\ManageBankAccounts;
+use App\Models\BankAccount;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -15,9 +15,9 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class CategoryResource extends Resource
+class BankAccountResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static ?string $model = BankAccount::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -34,6 +34,10 @@ class CategoryResource extends Resource
             ->components([
                 TextInput::make('name')
                     ->required(),
+                TextInput::make('balance')
+                    ->required()
+                    ->numeric()
+                    ->default(0),
             ]);
     }
 
@@ -44,6 +48,9 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
+                TextColumn::make('balance')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -70,7 +77,7 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageCategories::route('/'),
+            'index' => ManageBankAccounts::route('/'),
         ];
     }
 }
