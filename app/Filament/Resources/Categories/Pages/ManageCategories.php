@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\Categories\Pages;
 
 use App\Filament\Resources\Categories\CategoryResource;
@@ -13,7 +12,11 @@ class ManageCategories extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->mutateDataUsing(function (array $data): array {
+                    $data['user_id'] = auth()->id(); // <--- This implies the user
+                    return $data;
+                }),
         ];
     }
 }
