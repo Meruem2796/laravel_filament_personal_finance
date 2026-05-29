@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\Transactions;
 
 use App\Filament\Resources\Transactions\Pages\CreateTransaction;
@@ -40,9 +39,14 @@ class TransactionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListTransactions::route('/'),
+            'index'  => ListTransactions::route('/'),
             'create' => CreateTransaction::route('/create'),
-            'edit' => EditTransaction::route('/{record}/edit'),
+            'edit'   => EditTransaction::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->where('user_id', auth()->id());
     }
 }

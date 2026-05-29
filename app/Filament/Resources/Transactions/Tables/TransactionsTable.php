@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\Transactions\Tables;
 
 use Filament\Actions\BulkActionGroup;
@@ -14,8 +13,6 @@ class TransactionsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
-                    ->searchable(),
                 TextColumn::make('bankAccount.name')
                     ->searchable(),
                 TextColumn::make('description')

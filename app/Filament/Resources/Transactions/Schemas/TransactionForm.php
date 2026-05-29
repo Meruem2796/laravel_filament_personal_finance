@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Filament\Resources\Transactions\Schemas;
 
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class TransactionForm
@@ -14,20 +13,15 @@ class TransactionForm
     {
         return $schema
             ->components([
-                Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
                 Select::make('bank_account_id')
-                    ->relationship('bankAccount', 'name')
+                    ->relationship('bankAccount', 'name', fn($query) => $query->where('user_id', auth()->id()))
                     ->required(),
                 TextInput::make('description')
                     ->required(),
                 Select::make('category_id')
-                    ->relationship('category', 'name')
-                    ->required(),
+                    ->relationship('category', 'name', fn($query) => $query->where('user_id', auth()->id())),
                 Select::make('budget_id')
-                    ->relationship('budget', 'name')
-                    ->required(),
+                    ->relationship('budget', 'name', fn($query) => $query->where('user_id', auth()->id())),
                 DatePicker::make('date')
                     ->required(),
                 Textarea::make('note')
