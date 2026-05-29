@@ -13,22 +13,22 @@ class TransactionForm
     {
         return $schema
             ->components([
+                DatePicker::make('date')
+                    ->required(),
+                TextInput::make('amount')
+                    ->required()
+                    ->numeric(),
+                TextInput::make('description')
+                    ->required(),
                 Select::make('bank_account_id')
                     ->relationship('bankAccount', 'name', fn($query) => $query->where('user_id', auth()->id()))
-                    ->required(),
-                TextInput::make('description')
                     ->required(),
                 Select::make('category_id')
                     ->relationship('category', 'name', fn($query) => $query->where('user_id', auth()->id())),
                 Select::make('budget_id')
                     ->relationship('budget', 'name', fn($query) => $query->where('user_id', auth()->id())),
-                DatePicker::make('date')
-                    ->required(),
                 Textarea::make('note')
                     ->columnSpanFull(),
-                TextInput::make('amount')
-                    ->required()
-                    ->numeric(),
             ]);
     }
 }
