@@ -6,7 +6,9 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class TransactionsTable
 {
@@ -19,7 +21,10 @@ class TransactionsTable
                     ->sortable(),
                 TextColumn::make('amount')
                     ->money('EUR')
-                    ->sortable(),
+                    ->sortable()
+                    ->badge()
+                    ->color(fn($state): string => $state >= 0 ? 'success' : 'danger')
+                    ->icon(fn($state): string => $state >= 0 ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down'),
                 TextColumn::make('description')
                     ->searchable(),
                 TextColumn::make('bankAccount.name')
@@ -41,6 +46,23 @@ class TransactionsTable
             ])
             ->filters([
                 //
+                SelectFilter::make('transaction_type')
+                    ->label('Tipo')
+                    ->options([
+                        'income'  => 'Entrate',
+                        'expense' => 'Uscite',
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['value'] === 'income',
+                                fn(Builder $query): Builder => $query->where('amount', '>=', 0),
+                            )
+                            ->when(
+                                $data['value'] === 'expense',
+                                fn(Builder $query): Builder => $query->where('amount', '<', 0),
+                            );
+                    }),
             ])
             ->recordActions([
                 EditAction::make(),
