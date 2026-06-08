@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\Transactions\Pages;
 
 use App\Filament\Resources\Transactions\TransactionResource;

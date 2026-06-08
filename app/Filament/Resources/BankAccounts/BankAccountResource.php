@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\BankAccounts;
 
 use App\Filament\Resources\BankAccounts\Pages\ManageBankAccounts;
@@ -14,6 +15,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class BankAccountResource extends Resource
 {
@@ -23,7 +25,7 @@ class BankAccountResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('user_id', auth()->id());
     }

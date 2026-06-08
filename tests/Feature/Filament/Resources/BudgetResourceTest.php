@@ -4,10 +4,11 @@ use App\Enums\BudgetType;
 use App\Filament\Resources\Budgets\Pages\ManageBudgets;
 use App\Models\Budget;
 use App\Models\User;
+use Livewire\Livewire;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
-use Livewire\Livewire;
 
 it('can render page', function () {
     $user = User::factory()->create();
@@ -18,7 +19,7 @@ it('can render page', function () {
 });
 
 it('can list budgets', function () {
-    $user   = User::factory()->create();
+    $user = User::factory()->create();
     $budget = Budget::factory()->for($user)->create();
 
     Livewire::actingAs($user)
@@ -27,8 +28,8 @@ it('can list budgets', function () {
 });
 
 it('cannot see other users budgets', function () {
-    $user        = User::factory()->create();
-    $otherUser   = User::factory()->create();
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
     $otherBudget = Budget::factory()->for($otherUser)->create();
 
     Livewire::actingAs($user)
@@ -43,25 +44,25 @@ it('can create budget', function () {
         ->test(ManageBudgets::class)
         ->mountAction('create')
         ->setActionData([
-            'name'   => 'Monthly Groceries',
+            'name' => 'Monthly Groceries',
             'amount' => '500.00',
-            'type'   => BudgetType::Reset->value,
+            'type' => BudgetType::Reset->value,
         ])
         ->callMountedAction()
         ->assertHasNoActionErrors();
 
     assertDatabaseHas('budgets', [
         'user_id' => $user->id,
-        'name'    => 'Monthly Groceries',
-        'amount'  => 50000,
-        'type'    => BudgetType::Reset->value,
+        'name' => 'Monthly Groceries',
+        'amount' => 50000,
+        'type' => BudgetType::Reset->value,
     ]);
 });
 
 it('can edit budget', function () {
-    $user   = User::factory()->create();
+    $user = User::factory()->create();
     $budget = Budget::factory()->for($user)->create([
-        'name'   => 'Old Budget',
+        'name' => 'Old Budget',
         'amount' => 10000,
     ]);
 
@@ -69,23 +70,23 @@ it('can edit budget', function () {
         ->test(ManageBudgets::class)
         ->mountTableAction('edit', $budget)
         ->setTableActionData([
-            'name'   => 'New Budget',
+            'name' => 'New Budget',
             'amount' => '250.50',
-            'type'   => BudgetType::Rollover->value,
+            'type' => BudgetType::Rollover->value,
         ])
         ->callMountedTableAction()
         ->assertHasNoTableActionErrors();
 
     assertDatabaseHas('budgets', [
-        'id'     => $budget->id,
-        'name'   => 'New Budget',
+        'id' => $budget->id,
+        'name' => 'New Budget',
         'amount' => 25050,
-        'type'   => BudgetType::Rollover->value,
+        'type' => BudgetType::Rollover->value,
     ]);
 });
 
 it('can delete budget', function () {
-    $user   = User::factory()->create();
+    $user = User::factory()->create();
     $budget = Budget::factory()->for($user)->create();
 
     Livewire::actingAs($user)

@@ -7,10 +7,11 @@ use App\Models\BankAccount;
 use App\Models\Transaction;
 use App\Models\User;
 use Filament\Actions\DeleteAction;
+use Livewire\Livewire;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
-use Livewire\Livewire;
 
 it('can render list page', function () {
     $user = User::factory()->create();
@@ -21,7 +22,7 @@ it('can render list page', function () {
 });
 
 it('can list transactions', function () {
-    $user        = User::factory()->create();
+    $user = User::factory()->create();
     $transaction = Transaction::factory()->for($user)->create();
 
     Livewire::actingAs($user)
@@ -30,8 +31,8 @@ it('can list transactions', function () {
 });
 
 it('cannot see other users transactions', function () {
-    $user             = User::factory()->create();
-    $otherUser        = User::factory()->create();
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
     $otherTransaction = Transaction::factory()->for($otherUser)->create();
 
     Livewire::actingAs($user)
@@ -48,49 +49,49 @@ it('can render create page', function () {
 });
 
 it('can create transaction', function () {
-    $user        = User::factory()->create();
+    $user = User::factory()->create();
     $bankAccount = BankAccount::factory()->for($user)->create();
 
     Livewire::actingAs($user)
         ->test(CreateTransaction::class)
         ->fillForm([
-            'date'             => '2026-01-30',
+            'date' => '2026-01-30',
             'transaction_type' => 'expense',
-            'amount'           => '150.00',
-            'description'      => 'Test Transaction',
-            'bank_account_id'  => $bankAccount->id,
+            'amount' => '150.00',
+            'description' => 'Test Transaction',
+            'bank_account_id' => $bankAccount->id,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
 
     assertDatabaseHas('transactions', [
-        'user_id'         => $user->id,
+        'user_id' => $user->id,
         'bank_account_id' => $bankAccount->id,
-        'description'     => 'Test Transaction',
-        'amount'          => -15000, // 150.00 * 100, negative for expense
+        'description' => 'Test Transaction',
+        'amount' => -15000, // 150.00 * 100, negative for expense
     ]);
 });
 
 it('cannot create transaction for other user bank account', function () {
-    $user             = User::factory()->create();
-    $otherUser        = User::factory()->create();
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
     $otherBankAccount = BankAccount::factory()->for($otherUser)->create();
 
     Livewire::actingAs($user)
         ->test(CreateTransaction::class)
         ->fillForm([
-            'date'             => '2026-01-30',
+            'date' => '2026-01-30',
             'transaction_type' => 'expense',
-            'amount'           => '150.00',
-            'description'      => 'Test Transaction',
-            'bank_account_id'  => $otherBankAccount->id,
+            'amount' => '150.00',
+            'description' => 'Test Transaction',
+            'bank_account_id' => $otherBankAccount->id,
         ])
         ->call('create')
         ->assertHasFormErrors(['bank_account_id']);
 });
 
 it('can render edit page', function () {
-    $user        = User::factory()->create();
+    $user = User::factory()->create();
     $transaction = Transaction::factory()->for($user)->create();
 
     actingAs($user)
@@ -99,8 +100,8 @@ it('can render edit page', function () {
 });
 
 it('cannot render edit page for other user transaction', function () {
-    $user             = User::factory()->create();
-    $otherUser        = User::factory()->create();
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
     $otherTransaction = Transaction::factory()->for($otherUser)->create();
 
     actingAs($user)
@@ -109,12 +110,12 @@ it('cannot render edit page for other user transaction', function () {
 });
 
 it('can edit transaction', function () {
-    $user        = User::factory()->create();
+    $user = User::factory()->create();
     $bankAccount = BankAccount::factory()->for($user)->create();
     $transaction = Transaction::factory()->for($user)->create([
         'bank_account_id' => $bankAccount->id,
-        'description'     => 'Old Description',
-        'amount'          => -5000,
+        'description' => 'Old Description',
+        'amount' => -5000,
     ]);
 
     Livewire::actingAs($user)
@@ -126,13 +127,13 @@ it('can edit transaction', function () {
         ->assertHasNoFormErrors();
 
     assertDatabaseHas('transactions', [
-        'id'          => $transaction->id,
+        'id' => $transaction->id,
         'description' => 'Updated Description',
     ]);
 });
 
 it('can delete transaction', function () {
-    $user        = User::factory()->create();
+    $user = User::factory()->create();
     $transaction = Transaction::factory()->for($user)->create();
 
     Livewire::actingAs($user)

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\Transactions\Schemas;
 
 use Filament\Forms\Components\DatePicker;
@@ -23,15 +24,15 @@ class TransactionForm
                         ->label('Type')
                         ->options([
                             'expense' => 'Expense',
-                            'income'  => 'Income',
+                            'income' => 'Income',
                         ])
                         ->icons([
                             'expense' => 'heroicon-o-minus-circle',
-                            'income'  => 'heroicon-o-plus-circle',
+                            'income' => 'heroicon-o-plus-circle',
                         ])
                         ->colors([
                             'expense' => 'danger',
-                            'income'  => 'success',
+                            'income' => 'success',
                         ])
                         ->default('expense')
                         ->inline()
@@ -47,7 +48,7 @@ class TransactionForm
                         ->required()
                         ->numeric()
                         ->minValue(0)
-                        ->prefix(fn(Get $get) => $get('transaction_type') === 'income' ? '+' : '-')
+                        ->prefix(fn (Get $get) => $get('transaction_type') === 'income' ? '+' : '-')
                         ->afterStateHydrated(function (TextInput $component, $state) {
                             if ($state !== null) {
                                 $component->state(abs($state));
@@ -62,12 +63,12 @@ class TransactionForm
                 TextInput::make('description')
                     ->required(),
                 Select::make('bank_account_id')
-                    ->relationship('bankAccount', 'name', fn($query) => $query->where('user_id', auth()->id()))
+                    ->relationship('bankAccount', 'name', fn ($query) => $query->where('user_id', auth()->id()))
                     ->required(),
                 Select::make('category_id')
-                    ->relationship('category', 'name', fn($query) => $query->where('user_id', auth()->id())),
+                    ->relationship('category', 'name', fn ($query) => $query->where('user_id', auth()->id())),
                 Select::make('budget_id')
-                    ->relationship('budget', 'name', fn($query) => $query->where('user_id', auth()->id())),
+                    ->relationship('budget', 'name', fn ($query) => $query->where('user_id', auth()->id())),
                 Textarea::make('note')
                     ->columnSpanFull(),
             ]);

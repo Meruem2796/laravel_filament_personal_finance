@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\Budgets;
 
 use App\Enums\BudgetType;
@@ -60,8 +61,8 @@ class BudgetResource extends Resource
                     ->sortable(),
                 TextColumn::make('type')
                     ->badge()
-                    ->color(fn(BudgetType $state): string => match ($state) {
-                        BudgetType::Reset    => 'success',
+                    ->color(fn (BudgetType $state): string => match ($state) {
+                        BudgetType::Reset => 'success',
                         BudgetType::Rollover => 'warning',
                     })
                     ->searchable(),

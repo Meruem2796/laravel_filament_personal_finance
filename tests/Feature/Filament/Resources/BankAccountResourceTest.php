@@ -3,10 +3,11 @@
 use App\Filament\Resources\BankAccounts\Pages\ManageBankAccounts;
 use App\Models\BankAccount;
 use App\Models\User;
+use Livewire\Livewire;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
-use Livewire\Livewire;
 
 it('can render page', function () {
     $user = User::factory()->create();
@@ -17,7 +18,7 @@ it('can render page', function () {
 });
 
 it('can list bank accounts', function () {
-    $user        = User::factory()->create();
+    $user = User::factory()->create();
     $bankAccount = BankAccount::factory()->for($user)->create();
 
     Livewire::actingAs($user)
@@ -26,8 +27,8 @@ it('can list bank accounts', function () {
 });
 
 it('cannot see other users bank accounts', function () {
-    $user             = User::factory()->create();
-    $otherUser        = User::factory()->create();
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
     $otherBankAccount = BankAccount::factory()->for($otherUser)->create();
 
     Livewire::actingAs($user)
@@ -42,7 +43,7 @@ it('can create bank account', function () {
         ->test(ManageBankAccounts::class)
         ->mountAction('create')
         ->setActionData([
-            'name'    => 'My Main Bank',
+            'name' => 'My Main Bank',
             'balance' => '1000.50',
         ])
         ->callMountedAction()
@@ -50,15 +51,15 @@ it('can create bank account', function () {
 
     assertDatabaseHas('bank_accounts', [
         'user_id' => $user->id,
-        'name'    => 'My Main Bank',
+        'name' => 'My Main Bank',
         'balance' => 100050, // Value as integer thanks to our Caster ( 1000.50 * 100 )
     ]);
 });
 
 it('can edit bank account', function () {
-    $user        = User::factory()->create();
+    $user = User::factory()->create();
     $bankAccount = BankAccount::factory()->for($user)->create([
-        'name'    => 'Old Name',
+        'name' => 'Old Name',
         'balance' => 5000,
     ]);
 
@@ -66,21 +67,21 @@ it('can edit bank account', function () {
         ->test(ManageBankAccounts::class)
         ->mountTableAction('edit', $bankAccount)
         ->setTableActionData([
-            'name'    => 'New Name',
+            'name' => 'New Name',
             'balance' => '200.00',
         ])
         ->callMountedTableAction()
         ->assertHasNoTableActionErrors();
 
     assertDatabaseHas('bank_accounts', [
-        'id'      => $bankAccount->id,
-        'name'    => 'New Name',
+        'id' => $bankAccount->id,
+        'name' => 'New Name',
         'balance' => 20000,
     ]);
 });
 
 it('can delete bank account', function () {
-    $user        = User::factory()->create();
+    $user = User::factory()->create();
     $bankAccount = BankAccount::factory()->for($user)->create();
 
     Livewire::actingAs($user)

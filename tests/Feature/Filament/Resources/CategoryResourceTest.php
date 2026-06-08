@@ -3,10 +3,11 @@
 use App\Filament\Resources\Categories\Pages\ManageCategories;
 use App\Models\Category;
 use App\Models\User;
+use Livewire\Livewire;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
-use Livewire\Livewire;
 
 it('can render page', function () {
     $user = User::factory()->create();
@@ -17,7 +18,7 @@ it('can render page', function () {
 });
 
 it('can list categories', function () {
-    $user     = User::factory()->create();
+    $user = User::factory()->create();
     $category = Category::factory()->for($user)->create();
 
     Livewire::actingAs($user)
@@ -26,8 +27,8 @@ it('can list categories', function () {
 });
 
 it('cannot see other users categories', function () {
-    $user          = User::factory()->create();
-    $otherUser     = User::factory()->create();
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
     $otherCategory = Category::factory()->for($otherUser)->create();
 
     Livewire::actingAs($user)
@@ -49,12 +50,12 @@ it('can create category', function () {
 
     assertDatabaseHas('categories', [
         'user_id' => $user->id,
-        'name'    => 'Food & Drinks',
+        'name' => 'Food & Drinks',
     ]);
 });
 
 it('can edit category', function () {
-    $user     = User::factory()->create();
+    $user = User::factory()->create();
     $category = Category::factory()->for($user)->create([
         'name' => 'Old Category',
     ]);
@@ -69,13 +70,13 @@ it('can edit category', function () {
         ->assertHasNoTableActionErrors();
 
     assertDatabaseHas('categories', [
-        'id'   => $category->id,
+        'id' => $category->id,
         'name' => 'Updated Category',
     ]);
 });
 
 it('can delete category', function () {
-    $user     = User::factory()->create();
+    $user = User::factory()->create();
     $category = Category::factory()->for($user)->create();
 
     Livewire::actingAs($user)

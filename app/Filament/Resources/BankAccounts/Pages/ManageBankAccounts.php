@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\BankAccounts\Pages;
 
 use App\Filament\Resources\BankAccounts\BankAccountResource;

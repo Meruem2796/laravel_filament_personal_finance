@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\Budgets\Pages;
 
 use App\Filament\Resources\Budgets\BudgetResource;
