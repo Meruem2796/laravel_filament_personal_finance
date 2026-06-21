@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\Budgets;
 
 use App\Enums\BudgetType;
@@ -29,7 +28,7 @@ class BudgetResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', auth()->id());
+        return parent::getEloquentQuery();
     }
 
     public static function form(Schema $schema): Schema
@@ -61,8 +60,8 @@ class BudgetResource extends Resource
                     ->sortable(),
                 TextColumn::make('type')
                     ->badge()
-                    ->color(fn (BudgetType $state): string => match ($state) {
-                        BudgetType::Reset => 'success',
+                    ->color(fn(BudgetType $state): string => match ($state) {
+                        BudgetType::Reset    => 'success',
                         BudgetType::Rollover => 'warning',
                     })
                     ->searchable(),

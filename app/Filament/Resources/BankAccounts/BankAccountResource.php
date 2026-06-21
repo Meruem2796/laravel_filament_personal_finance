@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\BankAccounts;
 
 use App\Filament\Resources\BankAccounts\Pages\ManageBankAccounts;
@@ -27,7 +26,7 @@ class BankAccountResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', auth()->id());
+        return parent::getEloquentQuery();
     }
 
     public static function form(Schema $schema): Schema

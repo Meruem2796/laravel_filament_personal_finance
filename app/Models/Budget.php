@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Models;
 
 use App\Casts\MoneyCast;
 use App\Enums\BudgetType;
+use App\Models\Traits\BelongsToUser;
 use Database\Factories\BudgetFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +14,7 @@ class Budget extends Model
 {
     /** @use HasFactory<BudgetFactory> */
     use HasFactory;
+    use BelongsToUser;
 
     protected $fillable = [
         'user_id',
@@ -25,7 +26,7 @@ class Budget extends Model
     protected function casts(): array
     {
         return [
-            'type' => BudgetType::class,
+            'type'   => BudgetType::class,
             'amount' => MoneyCast::class,
         ];
     }

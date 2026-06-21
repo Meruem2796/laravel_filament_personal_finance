@@ -1,8 +1,8 @@
 <?php
-
 namespace App\Models;
 
 use App\Casts\MoneyCast;
+use App\Models\Traits\BelongsToUser;
 use Database\Factories\BankAccountFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +13,7 @@ class BankAccount extends Model
 {
     /** @use HasFactory<BankAccountFactory> */
     use HasFactory;
+    use BelongsToUser;
 
     protected $fillable = [
         'user_id',
