@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\Transactions\Tables;
 
 use Filament\Actions\BulkActionGroup;
@@ -21,11 +20,11 @@ class TransactionsTable
                     ->date()
                     ->sortable(),
                 TextColumn::make('amount')
-                    ->money('EUR')
+                    ->money(fn() => auth()->user()->currency, locale: fn() => auth()->user()->locale)
                     ->sortable()
                     ->badge()
-                    ->color(fn ($state): string => $state >= 0 ? 'success' : 'danger')
-                    ->icon(fn ($state): string => $state >= 0 ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down'),
+                    ->color(fn($state): string => $state >= 0 ? 'success' : 'danger')
+                    ->icon(fn($state): string => $state >= 0 ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down'),
                 TextColumn::make('description')
                     ->searchable(),
                 TextColumn::make('bankAccount.name')
@@ -50,18 +49,18 @@ class TransactionsTable
                 SelectFilter::make('transaction_type')
                     ->label('Tipo')
                     ->options([
-                        'income' => 'Entrate',
+                        'income'  => 'Entrate',
                         'expense' => 'Uscite',
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
                                 $data['value'] === 'income',
-                                fn (Builder $query): Builder => $query->where('amount', '>=', 0),
+                                fn(Builder $query): Builder => $query->where('amount', '>=', 0),
                             )
                             ->when(
                                 $data['value'] === 'expense',
-                                fn (Builder $query): Builder => $query->where('amount', '<', 0),
+                                fn(Builder $query): Builder => $query->where('amount', '<', 0),
                             );
                     }),
             ])

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -25,6 +24,8 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'currency',
+        'locale',
     ];
 
     /**
@@ -46,7 +47,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
